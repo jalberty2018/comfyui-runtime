@@ -1,10 +1,28 @@
 # comfyui-runtime
 
+A lightweight runtime Docker base image for ComfyUI and Code Server.
+
+## Base Image
+
+This image is built on top of a custom build pytorch-cuda-ubuntu-runtime image
+
+## Available Images
+
+### Image
+
+Base Image: ls250824/pytorch-cuda-ubuntu-runtime:19012025
+
+#### Custom Build: 
+
+```bash
+docker pull ls250824/comfyui-runtime:17032025
+```
+
 ## Building the Docker Image
 
 You can build and push the image to Docker Hub using the `build-docker.py` script.
 
-### Build Script Options
+### `build-docker.py` Script Options
 
 | Option         | Description                                         | Default                |
 |----------------|-----------------------------------------------------|------------------------|
@@ -27,19 +45,8 @@ comfyui-runtime
 
 Note: If you want to push the image with the latest tag, add the --latest flag at the end.
 
-## Available Images
-
-### Image
-
-Base Image: ls250824/pytorch-cuda-ubuntu-runtime:19012025
-
-#### Custom Build: 
-
-```bash
-docker pull ls250824/pytorch-cuda-ubuntu-runtime:17032025
-```
-
 ## Related projects
 
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 - [Code server](https://github.com/coder/code-server)
+
