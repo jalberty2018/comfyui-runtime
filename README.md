@@ -15,7 +15,7 @@ Base Image: ls250824/pytorch-cuda-ubuntu-runtime:19012025
 #### Custom Build: 
 
 ```bash
-docker pull ls250824/comfyui-runtime:08042025
+docker pull ls250824/comfyui-runtime:13042025
 ```
 
 ## Building the Docker Image
