@@ -15,7 +15,7 @@ Base Image: ls250824/pytorch-cuda-ubuntu-runtime:19012025
 #### Custom Build: 
 
 ```bash
-docker pull ls250824/comfyui-runtime:13042025
+docker pull ls250824/comfyui-runtime:21042025
 ```
 
 ## Building the Docker Image
@@ -49,4 +49,5 @@ Note: If you want to push the image with the latest tag, add the --latest flag a
 
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 - [Code server](https://github.com/coder/code-server)
+- [HuggingFace cli](https://huggingface.co/docs/huggingface_hub/guides/cli)
 

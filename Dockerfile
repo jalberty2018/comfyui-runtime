@@ -7,12 +7,15 @@ WORKDIR /
 # Install code-server in a single command to minimize image layers
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
+# Hugginface using environment variable HF_TOKEN
+RUN pip3 install --no-cache-dir --upgrade huggingface_hub
+
 # Copy and set up Civitai downloader with appropriate permissions
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
-# Hugginface using environment variable HF_TOKEN
-RUN pip3 install --no-cache-dir -U "huggingface_hub[cli]"
+# Install code-server in a single command to minimize image layers
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # Copy and set up Civitai downloader with appropriate permissions
 COPY civitai_environment.py /usr/local/bin/civitai
