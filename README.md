@@ -1,3 +1,5 @@
+[![Docker Image Version](https://img.shields.io/docker/v/ls250824/comfyui-runtime)](https://hub.docker.com/r/ls250824/comfyui-runtime)
+
 # comfyui-runtime
 
 A lightweight runtime Docker base image for ComfyUI and Code Server.
@@ -10,12 +12,12 @@ This image is built on top of a custom build pytorch-cuda-ubuntu-runtime image
 
 ### Image
 
-Base Image: ls250824/pytorch-cuda-ubuntu-runtime:19012025
+Base Image: ls250824/pytorch-cuda-ubuntu-runtime:2604205
 
 #### Custom Build: 
 
 ```bash
-docker pull ls250824/comfyui-runtime:21042025
+docker pull ls250824/comfyui-runtime:<version>
 ```
 
 ## Building the Docker Image
@@ -36,8 +38,9 @@ Run the following command to clone the repository and build the image:
 
 ```bash
 git clone https://github.com/jalberty2018/comfyui-runtime.git
+cp comfyui-runtime/build-docker.py ..
 
-python3 comfyui-runtime/build-docker.py \
+python3 build-docker.py \
 --username=<your_dockerhub_username> \
 --tag=<custom_tag> \ 
 comfyui-runtime

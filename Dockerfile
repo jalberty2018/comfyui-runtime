@@ -1,14 +1,14 @@
 # Use a specific, stable image to avoid future issues with updates
-FROM ls250824/pytorch-cuda-ubuntu-runtime:19012025 AS base
+FROM ls250824/pytorch-cuda-ubuntu-runtime:26042025 AS base
 
 # Set working directory
 WORKDIR /
 
-# Install code-server in a single command to minimize image layers
-RUN curl -fsSL https://code-server.dev/install.sh | sh
-
 # Hugginface using environment variable HF_TOKEN
 RUN pip3 install --no-cache-dir --upgrade huggingface_hub
+
+# Install code-server in a single command to minimize image layers
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # Copy and set up Civitai downloader with appropriate permissions
 COPY civitai_environment.py /usr/local/bin/civitai
