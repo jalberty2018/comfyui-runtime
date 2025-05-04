@@ -4,17 +4,15 @@
 
 A lightweight runtime Docker base image for ComfyUI and Code Server.
 
-## Base Image
-
-This image is built on top of a custom build pytorch-cuda-ubuntu-runtime image
-
 ## Available Images
 
-### Image
+### Base Images 
 
-Base Image: ls250824/pytorch-cuda-ubuntu-runtime:2604205
+#### ls250824/pytorch-cuda-ubuntu-runtime
+	
+[![Docker Image Version](https://img.shields.io/docker/v/ls250824/pytorch-cuda-ubuntu-runtime)](https://hub.docker.com/r/ls250824/pytorch-cuda-ubuntu-runtime)
 
-#### Custom Build: 
+### Custom Build: 
 
 ```bash
 docker pull ls250824/comfyui-runtime:<version>
