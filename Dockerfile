@@ -4,13 +4,13 @@ FROM ls250824/pytorch-cuda-ubuntu-runtime:05072025 AS base
 # Set working directory
 WORKDIR /
 
+# Install code-server
+RUN curl -fsSL https://code-server.dev/install.sh | sh	
+
 # Clone ComfyUI and setup
 RUN git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git && \
     cd /ComfyUI && \
     pip3 install --no-cache-dir -r requirements.txt
-
-# Install code-server
-RUN curl -fsSL https://code-server.dev/install.sh | sh	
 	
 # Copy and set up Civitai downloader with appropriate permissions
 COPY civitai_environment.py /usr/local/bin/civitai
