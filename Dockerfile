@@ -4,6 +4,10 @@ FROM ls250824/pytorch-cuda-ubuntu-runtime:05072025 AS base
 # Set working directory
 WORKDIR /
 
+# Copy and set up Civitai downloader with appropriate permissions
+COPY civitai_environment.py /usr/local/bin/civitai
+RUN chmod +x /usr/local/bin/civitai
+
 # Install code-server
 RUN curl -fsSL https://code-server.dev/install.sh | sh	
 
@@ -11,7 +15,7 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh
 RUN git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git && \
     cd /ComfyUI && \
     pip3 install --no-cache-dir -r requirements.txt
-	
+
 # Copy and set up Civitai downloader with appropriate permissions
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
@@ -23,7 +27,7 @@ RUN wget https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/downl
 RUN wget https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.0.0/sageattention-2.2.0-cp311-cp311-linux_x86_64.whl 
 
 # Install wheels
-RUN pip3 install --no-cache-dir huggingface_hub comfy-cli \
+RUN pip3 install --no-cache-dir -U "huggingface_hub[cli]" comfy-cli \
     flash_attn-2.7.2-cp311-cp311-linux_x86_64.whl \
     sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
     onnxruntime-gpu --extra-index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/  && \
