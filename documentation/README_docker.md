@@ -15,13 +15,14 @@ A lightweight runtime Docker base image for ComfyUI.
 |-----------|----------------------|
 | OS        | `Ubuntu 22.x x86_64` |
 | Python    | `3.11.x`             |
-| PyTorch   | `2.7.1`              |
-| CUDA      | `12.8`               |
+| PyTorch   | `2.8.0`              |
+| CUDA      | `12.9`               |
 | Triton    | `3.x`                |
+| onnxruntime-gpu | `latest` |
 
 ## Installed Attentions
 
 | Package        | Version  |
 |-----------------|----------|
-| flash_attn     | 2.7.2    |
+| flash_attn     | 2.8.3    |
 | sageattention   | 2.2.0    |
