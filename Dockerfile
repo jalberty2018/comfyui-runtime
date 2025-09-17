@@ -1,6 +1,12 @@
 # Use a specific, stable image to avoid future issues with updates
 FROM ls250824/pytorch-cuda-ubuntu-runtime:22082025 AS base
 
+# Fast, quiet pip + cleaner Python layers
+ENV PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
 # Set working directory
 WORKDIR /
 
