@@ -8,17 +8,17 @@ WORKDIR /
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
-# Clone ComfyUI and setup
-RUN git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git && \
-    cd /ComfyUI && \
-    pip3 install --no-cache-dir -r requirements.txt
-
 # Install code-server
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # Copy and set up Civitai downloader with appropriate permissions
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
+
+# Clone ComfyUI and setup
+RUN git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git && \
+    cd /ComfyUI && \
+    pip3 install --no-cache-dir -r requirements.txt
 
 # Download the wheel for flash_attn
 RUN wget https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.1.0/flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl
