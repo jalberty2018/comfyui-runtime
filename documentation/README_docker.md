@@ -8,6 +8,7 @@ A lightweight runtime Docker base image for ComfyUI.
 - [HuggingFace cli](https://huggingface.co/docs/huggingface_hub/guides/cli)
 - [Flash attention](https://github.com/Dao-AILab/flash-attention)
 - [Sage attention](https://github.com/thu-ml/SageAttention)
+- [Onnxruntime-gpu](https://pypi.org/project/onnxruntime-gpu/)
 
 ## Setup
 
@@ -18,7 +19,7 @@ A lightweight runtime Docker base image for ComfyUI.
 | PyTorch   | `2.8.0`              |
 | CUDA      | `12.9`               |
 | Triton    | `3.x`                |
-| onnxruntime-gpu | `latest` |
+| onnxruntime-gpu | `>=1.20` |
 
 ## Installed Attentions
 

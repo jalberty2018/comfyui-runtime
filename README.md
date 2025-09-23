@@ -21,7 +21,7 @@ A lightweight runtime Docker base image for ComfyUI.
 | PyTorch   | `2.8.0`              |
 | CUDA      | `12.9`               |
 | Triton    | `3.x`                |
-| onnxruntime-gpu | `latest` |
+| onnxruntime-gpu | `>=1.20` |
 
 ## Installed Attentions
 
