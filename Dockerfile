@@ -8,9 +8,6 @@ WORKDIR /
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
-# Install code-server
-RUN curl -fsSL https://code-server.dev/install.sh | sh
-
 # Copy and set up Civitai downloader with appropriate permissions
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
@@ -26,6 +23,9 @@ RUN wget https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/downl
 
 # Install onnx-gpu 	
 RUN pip3 install --no-cache-dir onnx onnxruntime-gpu>=1.20
+
+# Install code-server
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # Clone ComfyUI and Setup
 RUN git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git && \
