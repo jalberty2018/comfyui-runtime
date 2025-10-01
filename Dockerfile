@@ -1,5 +1,5 @@
 # Base Ubuntu image with pythorch and cuda support.
-FROM ls250824/pytorch-cuda-ubuntu-runtime:22082025 AS base
+FROM ls250824/pytorch-cuda-ubuntu-runtime:01102025 AS base
 
 # Set working directory
 WORKDIR /
