@@ -14,13 +14,13 @@ RUN wget https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/downl
 	pip3 install --no-cache-dir -U "huggingface_hub[cli]" comfy-cli \
     flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
     sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
-    onnxruntime-gpu>=1.22.0	&& \
+    onnxruntime-gpu==1.22.0	&& \
     rm -f flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl sageattention-2.2.0-cp311-cp311-linux_x86_64.whl
 
 # Clone ComfyUI and Setup
 RUN git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git && \
     cd /ComfyUI && \
     pip3 install --no-cache-dir -r requirements.txt
-	
+
 # Install code-server
 RUN curl -fsSL https://code-server.dev/install.sh | sh
