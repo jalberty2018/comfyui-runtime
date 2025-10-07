@@ -19,7 +19,7 @@ Base Docker base image for ComfyUI, Code-Server and downloaders.
 | Python    | `3.11.x`             |
 | PyTorch   | `2.8.0`              |
 | CUDA      | `12.9.x`             |
-| Triton    | `2.4.x`              |
+| Triton    | `3.4.x`              |
 | onnxruntime-gpu | `1.22.x` |
 | ComfyUI | Latest |
 | CodeServer | Latest |
