@@ -2,7 +2,7 @@
 
 # comfyui-runtime
 
-A lightweight runtime Docker base image for ComfyUI.
+Base Docker base image for ComfyUI, Code-Server and downloaders.
 
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 - [comfy-cli](https://github.com/Comfy-Org/comfy-cli)
@@ -11,26 +11,27 @@ A lightweight runtime Docker base image for ComfyUI.
 - [Flash attention](https://github.com/Dao-AILab/flash-attention)
 - [Sage attention](https://github.com/thu-ml/SageAttention)
 - [Onnxruntime-gpu](https://pypi.org/project/onnxruntime-gpu/)
+- [Triton](https://triton-lang.org/main/index.html)
 
 ## Setup
 
 | Component | Version              |
 |-----------|----------------------|
-| OS        | `Ubuntu 22.x x86_64` |
+| OS        | `Ubuntu 24.04 x86_64`|
 | Python    | `3.11.x`             |
 | PyTorch   | `2.8.0`              |
-| CUDA      | `12.9`               |
-| Triton    | `3.x`                |
-| onnxruntime-gpu | `>=1.20.0` |
+| CUDA      | `12.9.x`             |
+| Triton    | `2.4.x`              |
+| onnxruntime-gpu | `1.22.x` |
 | ComfyUI | Latest |
 | CodeServer | Latest |
 
 ## Installed Attentions
 
 | Package        | Version  |
-|-----------------|----------|
+|----------------|----------|
 | flash_attn     | 2.8.3    |
-| sageattention   | 2.2.0    |
+| sageattention  | 2.2.0    |
 
 ## Available Images
 
@@ -65,6 +66,9 @@ Run the following command to clone the repository and build the image:
 ```bash
 git clone https://github.com/jalberty2018/comfyui-runtime.git
 cp comfyui-runtime/build-docker.py ..
+
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
 
 python3 build-docker.py \
 --username=<your_dockerhub_username> \
