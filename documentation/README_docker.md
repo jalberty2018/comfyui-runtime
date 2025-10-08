@@ -30,3 +30,18 @@ Base Docker base image for ComfyUI, Code-Server and downloaders.
 |----------------|----------|
 | flash_attn     | 2.8.3    |
 | sageattention  | 2.2.0    |
+
+## Building constrains (/constraints.txt)
+
+```txt
+numpy<2
+nonnxruntime-gpu==1.22.*
+onnxruntime==0
+```
+
+## Docker speed up
+
+```bash
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+```
