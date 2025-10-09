@@ -1,5 +1,4 @@
 # syntax=docker/dockerfile:1.7
-# Base Ubuntu image with pythorch and cuda support.
 FROM ls250824/pytorch-cuda-ubuntu-runtime:01102025
 
 # Set working directory
@@ -27,12 +26,18 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Install code-server
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
-# Install ComfyUI
+# Clone ComfyUI
+RUN --mount=type=cache,target=/root/.cache/git \
+    git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git /ComfyUI && \
+
+# Install ComfyUI requirements
+WORKDIR /ComfyUI
+
 RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=cache,target=/root/.cache/git \
-    git clone --depth=1 --filter=blob:none https://github.com/comfyanonymous/ComfyUI.git /ComfyUI && \
-    cd /ComfyUI && \
     python -m pip install --no-cache-dir -r requirements.txt -c /constraints.txt
+
+# Set working directory
+WORKDIR /
 
 # Labels
 LABEL org.opencontainers.image.title="Base ComfyUI + code-server + downloaders" \
@@ -40,6 +45,7 @@ LABEL org.opencontainers.image.title="Base ComfyUI + code-server + downloaders" 
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-venv-runtime" \
       org.opencontainers.image.licenses="MIT"
 
+# Check
 RUN python -c "import torch, torchvision, torchaudio, triton, importlib, importlib.util as iu; \
 print(f'Torch: {torch.__version__}'); \
 print(f'Torchvision: {torchvision.__version__}'); \
