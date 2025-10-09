@@ -28,7 +28,7 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # Clone ComfyUI
 RUN --mount=type=cache,target=/root/.cache/git \
-    git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git /ComfyUI && \
+    git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git /ComfyUI
 
 # Install ComfyUI requirements
 WORKDIR /ComfyUI
