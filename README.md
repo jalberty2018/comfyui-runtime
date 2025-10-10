@@ -37,7 +37,7 @@ Base Docker base image for ComfyUI, Code-Server and downloaders.
 
 ```txt
 numpy<2
-nonnxruntime-gpu==1.22.*
+onnxruntime-gpu==1.22.*
 onnxruntime==0
 ```
 

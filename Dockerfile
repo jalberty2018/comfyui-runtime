@@ -15,8 +15,9 @@ RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\n" > /constraints.t
 RUN wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.1.0/flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl && \
     wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.1.0/sageattention-2.2.0-cp311-cp311-linux_x86_64.whl
 
+# Install and remove wheels
 RUN --mount=type=cache,target=/root/.cache/pip \
-    python -m pip install --no-cache-dir -c /constraints.txt \
+    python -m pip install --no-cache-dir --root-user-action ignore -c /constraints.txt \
       ./flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
       ./sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
       "onnxruntime-gpu==1.22.*" "huggingface_hub[cli]" comfy-cli && \
@@ -34,7 +35,7 @@ RUN --mount=type=cache,target=/root/.cache/git \
 WORKDIR /ComfyUI
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    python -m pip install --no-cache-dir -r requirements.txt -c /constraints.txt
+    python -m pip install --no-cache-dir --root-user-action ignore -r requirements.txt -c /constraints.txt
 
 # Set working directory
 WORKDIR /
