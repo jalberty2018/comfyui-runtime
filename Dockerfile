@@ -8,12 +8,12 @@ WORKDIR /
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
-# Pin ORT-GPU to 1.22.* so and numpy.
-RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\n" > /constraints.txt
+# Pin ORT-GPU to 1.22.* so , numpy and attentions.
+RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\nflash_attn==2.8.3\nsageattention==2.2.0\n" > /constraints.txt
 
 # Download wheels
-RUN wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.1.0/flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl && \
-    wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.1.0/sageattention-2.2.0-cp311-cp311-linux_x86_64.whl
+RUN wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.2.0/flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl && \
+    wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.2.0/sageattention-2.2.0-cp311-cp311-linux_x86_64.whl
 
 # Install and remove wheels
 RUN --mount=type=cache,target=/root/.cache/pip \
