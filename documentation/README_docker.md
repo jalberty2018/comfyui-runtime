@@ -15,7 +15,7 @@ Base Docker base image for ComfyUI, Code-Server and downloaders.
 
 | Component | Version              |
 |-----------|----------------------|
-| OS        | `Ubuntu 24.04 x86_64`|
+| OS        | `Ubuntu 22.04 x86_64`|
 | Python    | `3.11.x`             |
 | PyTorch   | `2.8.0`              |
 | CUDA      | `12.9.x`             |
