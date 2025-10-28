@@ -8,6 +8,10 @@ WORKDIR /
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
+# Clone ComfyUI
+RUN --mount=type=cache,target=/root/.cache/git \
+    git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git /ComfyUI
+
 # Pin ORT-GPU to 1.22.* so , numpy and attentions.
 RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\nflash_attn==2.8.3\nsageattention==2.2.0\n" > /constraints.txt
 
@@ -23,10 +27,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
       "onnxruntime-gpu==1.22.*" "huggingface_hub[cli]" comfy-cli && \
     rm -f flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
           sageattention-2.2.0-cp311-cp311-linux_x86_64.whl
-
-# Clone ComfyUI
-RUN --mount=type=cache,target=/root/.cache/git \
-    git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git /ComfyUI
 
 # Install code-server
 RUN curl -fsSL https://code-server.dev/install.sh | sh

@@ -1,6 +1,7 @@
 # comfyui-runtime
 
-Base Docker base image for ComfyUI, Code-Server and downloaders.
+Docker base image for ComfyUI, Code-Server and downloaders based on ls250824/pytorch-cuda-ubuntu-runtime.
+This image does not start any service use ls250824/run-x
 
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 - [comfy-cli](https://github.com/Comfy-Org/comfy-cli)
@@ -24,7 +25,7 @@ Base Docker base image for ComfyUI, Code-Server and downloaders.
 | ComfyUI | Latest |
 | CodeServer | Latest |
 
-## Installed Attentions
+## Installed Attentions latest image
 
 ### Wheels
 
