@@ -8,6 +8,9 @@ WORKDIR /
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
+# Install code-server
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
 # Clone ComfyUI
 RUN --mount=type=cache,target=/root/.cache/git \
     git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git /ComfyUI
@@ -28,9 +31,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     rm -f flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
           sageattention-2.2.0-cp311-cp311-linux_x86_64.whl
 
-# Install code-server
-RUN curl -fsSL https://code-server.dev/install.sh | sh
-
 # Install ComfyUI requirements
 WORKDIR /ComfyUI
 
@@ -41,7 +41,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 WORKDIR /
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.3.68 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-venv-runtime" \
       org.opencontainers.image.licenses="MIT"

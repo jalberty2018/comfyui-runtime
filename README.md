@@ -14,27 +14,27 @@ This image does not start any service use ls250824/run-x
 - [Onnxruntime-gpu](https://pypi.org/project/onnxruntime-gpu/)
 - [Triton](https://triton-lang.org/main/index.html)
 
-## Setup latest image
+## Setup image
 
 | Component | Version              |
 |-----------|----------------------|
-| OS        | `Ubuntu 22.04 x86_64`|
+| OS        | `Ubuntu 22.04 x86_64` |
 | Python    | `3.11.x`             |
 | PyTorch   | `2.8.0`              |
-| CUDA      | `12.9.x`             |
-| Triton    | `3.4.x`              |
+| CUDA      | `12.9`             |
+| Triton    | `3.4.0`               |
 | onnxruntime-gpu | `1.22.x` |
-| ComfyUI | Latest |
+| ComfyUI | `0.3.68`  | 
 | CodeServer | Latest |
 
-## Installed Attentions latest image
+## Installed Attentions
 
 ### Wheels
 
 | Package        | Version  |
 |----------------|----------|
-| flash_attn     | 2.8.3    |
-| sageattention  | 2.2.0    |
+| flash_attn     | `2.8.3`    |
+| sageattention  |  `2.2.0`   |
 
 ### Build for
 
