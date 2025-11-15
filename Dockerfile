@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-FROM ls250824/pytorch-cuda-ubuntu-runtime:01102025
+FROM ls250824/pytorch-cuda-ubuntu-runtime:08112025
 
 # Set working directory
 WORKDIR /
@@ -19,8 +19,8 @@ RUN --mount=type=cache,target=/root/.cache/git \
 RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\nflash_attn==2.8.3\nsageattention==2.2.0\n" > /constraints.txt
 
 # Download wheels
-RUN wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.2.0/flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl && \
-    wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.2.0/sageattention-2.2.0-cp311-cp311-linux_x86_64.whl
+RUN wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl && \
+    wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/sageattention-2.2.0-cp311-cp311-linux_x86_64.whl
 
 # Install and remove wheels
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -43,7 +43,7 @@ WORKDIR /
 # Labels
 LABEL org.opencontainers.image.title="Base image ComfyUI 0.3.68 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + code-server + civitai downloader + huggingface_hub" \
-      org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-venv-runtime" \
+      org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"
 
 # Check
