@@ -20,11 +20,11 @@ This image does not start any service use ls250824/run-x
 |-----------|----------------------|
 | OS        | `Ubuntu 22.04 x86_64` |
 | Python    | `3.11.x`             |
-| PyTorch   | `2.9.0`              |
+| PyTorch   | `2.9.1`              |
 | CUDA      | `12.8`             |
-| Triton    | `3.4.0`               |
+| Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x` |
-| ComfyUI | `0.3.68`  | 
+| ComfyUI | `0.3.69`  | 
 | CodeServer | Latest |
 
 ## Installed Attentions

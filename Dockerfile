@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-FROM ls250824/pytorch-cuda-ubuntu-runtime:08112025
+FROM ls250824/pytorch-cuda-ubuntu-runtime:15112025
 
 # Set working directory
 WORKDIR /
@@ -41,7 +41,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 WORKDIR /
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.3.68 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.3.69 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"
