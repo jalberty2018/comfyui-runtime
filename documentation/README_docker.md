@@ -1,7 +1,12 @@
 # comfyui-runtime
 
-Docker base image for ComfyUI, Code-Server and downloaders based on ls250824/pytorch-cuda-ubuntu-runtime.
-This image does not start any service use ls250824/run-x
+## Information
+
+- Docker base image for ComfyUI inference including code-server, civitai and hf downloaders and flash/sage attention.
+- Based on ls250824/pytorch-cuda-ubuntu-runtime.
+- This image does not start any service use ls250824/run-x
+
+## Installed
 
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 - [comfy-cli](https://github.com/Comfy-Org/comfy-cli)
@@ -12,7 +17,11 @@ This image does not start any service use ls250824/run-x
 - [Onnxruntime-gpu](https://pypi.org/project/onnxruntime-gpu/)
 - [Triton](https://triton-lang.org/main/index.html)
 
-## Setup latest image
+## Images on Docker 
+
+- If the image is **less then one day old** it is possible that it is not tested or will be updated.
+
+## Setup image 19112025
 
 | Component | Version              |
 |-----------|----------------------|
@@ -22,8 +31,8 @@ This image does not start any service use ls250824/run-x
 | CUDA      | `12.8`             |
 | Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x` |
-| ComfyUI | `0.3.69`  | 
-| CodeServer | Latest |
+| ComfyUI | `0.3.70`  | 
+| CodeServer | `Latest` |
 
 ## Installed Attentions latest image
 
