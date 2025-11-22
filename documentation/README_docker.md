@@ -21,7 +21,7 @@
 
 - If the image is **less then one day old** it is possible that it is not tested or will be updated.
 
-## Setup image 19112025
+## Setup image 22112025
 
 | Component | Version              |
 |-----------|----------------------|
@@ -31,7 +31,7 @@
 | CUDA      | `12.8`             |
 | Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x` |
-| ComfyUI | `0.3.70`  | 
+| ComfyUI | `0.3.71`  | 
 | CodeServer | `Latest` |
 
 ## Installed Attentions latest image

@@ -24,7 +24,7 @@ This image does not start any service use ls250824/run-x
 | CUDA      | `12.8`             |
 | Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x` |
-| ComfyUI | `0.3.70`  | 
+| ComfyUI | `0.3.71`  | 
 | CodeServer |  `Latest` |
 
 ## Installed Attentions
