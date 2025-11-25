@@ -2,9 +2,14 @@
 
 # comfyui-runtime
 
-Docker base image for ComfyUI, Code-Server and downloaders based on ls250824/pytorch-cuda-ubuntu-runtime.
-This image does not start any service use ls250824/run-x
+## Information
 
+- Docker base image for ComfyUI inference.
+- This image does not start any service use ls250824/run-x
+- Based on ls250824/pytorch-cuda-ubuntu-runtime<date>.
+
+## Websites	
+	
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 - [comfy-cli](https://github.com/Comfy-Org/comfy-cli)
 - [Code server](https://github.com/coder/code-server)
@@ -13,8 +18,11 @@ This image does not start any service use ls250824/run-x
 - [Sage attention](https://github.com/thu-ml/SageAttention)
 - [Onnxruntime-gpu](https://pypi.org/project/onnxruntime-gpu/)
 - [Triton](https://triton-lang.org/main/index.html)
+- [torch_generic_nms](https://github.com/ronghanghu/torch_generic_nms)
 
-## Setup image
+## Setup
+
+### Image
 
 | Component | Version              |
 |-----------|----------------------|
@@ -27,16 +35,15 @@ This image does not start any service use ls250824/run-x
 | ComfyUI | `0.3.71`  | 
 | CodeServer |  `Latest` |
 
-## Installed Attentions
-
 ### Wheels
 
 | Package        | Version  |
 |----------------|----------|
 | flash_attn     | `2.8.3`    |
 | sageattention  |  `2.2.0`   |
+| torch_generic_nms | `0.1` |
 
-### Build for
+### Optimised
 
 | Processor | Compute Capability | SM |
 |------------|-----------------|-----------|

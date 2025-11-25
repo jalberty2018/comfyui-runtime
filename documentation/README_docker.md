@@ -2,11 +2,11 @@
 
 ## Information
 
-- Docker base image for ComfyUI inference including code-server, civitai and hf downloaders and flash/sage attention.
-- Based on ls250824/pytorch-cuda-ubuntu-runtime.
+- Docker base image for ComfyUI inference.
 - This image does not start any service use ls250824/run-x
+- Based on ls250824/pytorch-cuda-ubuntu-runtime<date>.
 
-## Installed
+## Websites	
 
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 - [comfy-cli](https://github.com/Comfy-Org/comfy-cli)
@@ -16,12 +16,15 @@
 - [Sage attention](https://github.com/thu-ml/SageAttention)
 - [Onnxruntime-gpu](https://pypi.org/project/onnxruntime-gpu/)
 - [Triton](https://triton-lang.org/main/index.html)
+- [torch_generic_nms](https://github.com/ronghanghu/torch_generic_nms)
 
 ## Images on Docker 
 
 - If the image is **less then one day old** it is possible that it is not tested or will be updated.
 
-## Setup image 22112025
+## Setup image 25112025
+
+### Image
 
 | Component | Version              |
 |-----------|----------------------|
@@ -32,9 +35,7 @@
 | Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x` |
 | ComfyUI | `0.3.71`  | 
-| CodeServer | `Latest` |
-
-## Installed Attentions latest image
+| CodeServer |  `Latest` |
 
 ### Wheels
 
@@ -42,8 +43,9 @@
 |----------------|----------|
 | flash_attn     | `2.8.3`    |
 | sageattention  |  `2.2.0`   |
+| torch_generic_nms | `0.1` |
 
-### Build for
+### Optimised
 
 | Processor | Compute Capability | SM |
 |------------|-----------------|-----------|

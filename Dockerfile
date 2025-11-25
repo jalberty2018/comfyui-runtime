@@ -20,16 +20,19 @@ RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\nflash_attn==2.8.3\
 
 # Download wheels
 RUN wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl && \
-    wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/sageattention-2.2.0-cp311-cp311-linux_x86_64.whl
+    wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/sageattention-2.2.0-cp311-cp311-linux_x86_64.whl && \
+	wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl
 
 # Install and remove wheels
 RUN --mount=type=cache,target=/root/.cache/pip \
     python -m pip install --no-cache-dir --root-user-action ignore -c /constraints.txt \
       ./flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
       ./sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
+	  ./torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl \
       "onnxruntime-gpu==1.22.*" "huggingface_hub[cli]" comfy-cli onnx && \
     rm -f flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
-          sageattention-2.2.0-cp311-cp311-linux_x86_64.whl
+          sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
+		  torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl
 
 # Install ComfyUI requirements
 WORKDIR /ComfyUI
@@ -42,7 +45,7 @@ WORKDIR /
 
 # Labels
 LABEL org.opencontainers.image.title="Base image ComfyUI 0.3.71 + code-server + downloaders" \
-      org.opencontainers.image.description="ComfyUI 0.3.71 + flash-attn + sageattention + onnxruntime-gpu + code-server + civitai downloader + huggingface_hub" \
+      org.opencontainers.image.description="ComfyUI 0.3.71 + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"
 
