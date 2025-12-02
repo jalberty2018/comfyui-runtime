@@ -8,13 +8,12 @@ WORKDIR /
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
-# Install code-server
-RUN curl -fsSL https://code-server.dev/install.sh | sh
-
 # Clone ComfyUI
 RUN --mount=type=cache,target=/root/.cache/git \
     git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git /ComfyUI
 
+# Install code-server
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # Pin ORT-GPU to 1.22.* so , numpy and attentions.
 RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\nflash_attn==2.8.3\nsageattention==2.2.0\n" > /constraints.txt
@@ -45,7 +44,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 WORKDIR /
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.3.75 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.3.76 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"

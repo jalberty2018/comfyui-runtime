@@ -4,7 +4,7 @@
 
 - Docker base image for ComfyUI inference.
 - This image does not start any service use ls250824/run-x
-- Based on ls250824/pytorch-cuda-ubuntu-runtime<date>.
+- Based on ls250824/pytorch-cuda-ubuntu-runtime<[![Docker Image Version](https://img.shields.io/docker/v/ls250824/pytorch-cuda-ubuntu-runtime)](https://hub.docker.com/r/ls250824/pytorch-cuda-ubuntu-runtime)>.
 
 ## Websites	
 
@@ -34,7 +34,7 @@
 | CUDA      | `12.8`             |
 | Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x` |
-| ComfyUI | `0.3.75`  | 
+| ComfyUI | `0.3.76`  | 
 | CodeServer |  `Latest` |
 
 ### Wheels
