@@ -16,12 +16,13 @@ RUN --mount=type=cache,target=/root/.cache/git \
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # Pin ORT-GPU to 1.22.* so , numpy and attentions.
-RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\nflash_attn==2.8.3\nsageattention==2.2.0\n" > /constraints.txt
+RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\nflash_attn==2.8.3\nsageattention==2.2.0\nllama_cpp_python==0.3.16\n" > /constraints.txt
 
 # Download wheels
 RUN wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl && \
     wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/sageattention-2.2.0-cp311-cp311-linux_x86_64.whl && \
-	wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl
+	wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl && \
+	wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/llama_cpp_python-0.3.16-cp311-cp311-linux_x86_64.whl
 
 # Install and remove wheels
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -33,6 +34,14 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     rm -f flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
           sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
 		  torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl
+
+RUN --mount=type=cache,target=/root/.cache/pip \
+    python -m pip install --no-cache-dir --root-user-action ignore -c /constraints.txt \
+      ./llama_cpp_python-0.3.16-cp311-cp311-linux_x86_64.whl && \
+    rm -f llama_cpp_python-0.3.16-cp311-cp311-linux_x86_64.whl && \
+    echo "/opt/conda/lib/python3.11/site-packages/nvidia/cuda_runtime/lib" > /etc/ld.so.conf.d/cuda-runtime.conf  && \
+    echo "/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib" > /etc/ld.so.conf.d/cublas.conf && \
+    ldconfig
 
 # Install ComfyUI requirements
 WORKDIR /ComfyUI

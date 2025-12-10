@@ -2,7 +2,7 @@
 
 ## Information
 
-- Docker base image for ComfyUI inference.
+- Docker base image for ComfyUI inference with GPU (CUDA) acceleration.
 - This image does not start any service use ls250824/run-x
 - Based on ls250824/pytorch-cuda-ubuntu-runtime<[![Docker Image Version](https://img.shields.io/docker/v/ls250824/pytorch-cuda-ubuntu-runtime)](https://hub.docker.com/r/ls250824/pytorch-cuda-ubuntu-runtime)>.
 
@@ -17,12 +17,13 @@
 - [Onnxruntime-gpu](https://pypi.org/project/onnxruntime-gpu/)
 - [Triton](https://triton-lang.org/main/index.html)
 - [torch_generic_nms](https://github.com/ronghanghu/torch_generic_nms)
+- [llama-cpp](https://github.com/ggml-org/llama.cpp)
 
 ## Images on Docker 
 
 - If the image is **less then one day old** it is possible that it is not tested or will be updated.
 
-## Setup image 25112025
+## Setup image latest image
 
 ### Image
 
@@ -34,7 +35,7 @@
 | CUDA      | `12.8`             |
 | Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x` |
-| ComfyUI | `0.3.76`  | 
+| ComfyUI | `0.4.0`  | 
 | CodeServer |  `Latest` |
 
 ### Wheels
@@ -44,13 +45,14 @@
 | flash_attn     | `2.8.3`    |
 | sageattention  |  `2.2.0`   |
 | torch_generic_nms | `0.1` |
+| llmama-cpp | `0.3.16` |
 
 ### Optimised
 
-| Processor | Compute Capability | SM |
-|------------|-----------------|-----------|
-| A40  | 8.6 | sm_86 |
-| L40S | 8.9 | sm_89 |
+| Processor example | Compute Capability | Family | SM |
+|------------|---------|--------|-----------|
+| A40  | 8.6 | Ampere    | sm_86 |
+| L40S | 8.9 | Ada Lovelace  | sm_89 |
 
 ## Building constrains (/constraints.txt)
 
@@ -58,6 +60,7 @@
 numpy<2
 onnxruntime-gpu==1.22.*
 onnxruntime==0
+llmama-cpp==0.3.16
 ```
 
 ## Docker speed up
