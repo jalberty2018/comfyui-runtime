@@ -31,19 +31,27 @@ def get_args():
         help='Output path, eg: /workspace/stable-diffusion-webui/models/Stable-diffusion'
     )
 
+    parser.add_argument(
+        '--quit',
+        action='store_true',
+        help='No console output except error handling'
+    )
+
     return parser.parse_args()
-    
+
+
 def get_token():
     # Access the environment variable with a default value
     civitai_token = os.environ.get('CIVITAI_TOKEN', 'default_value')
-    
+
     # Raise an error if not set
     if civitai_token is None:
         raise ValueError("CIVITAI_TOKEN environment variable is not set")
-        
+
     return civitai_token
 
-def download_file(url: str, output_path: str, token: str):
+
+def download_file(url: str, output_path: str, token: str, quiet: bool):
     headers = {
         'Authorization': f'Bearer {token}',
         'User-Agent': USER_AGENT,
@@ -79,7 +87,6 @@ def download_file(url: str, output_path: str, token: str):
         raise Exception('No redirect found, something went wrong')
 
     total_size = response.getheader('Content-Length')
-
     if total_size is not None:
         total_size = int(total_size)
 
@@ -88,6 +95,7 @@ def download_file(url: str, output_path: str, token: str):
     with open(output_file, 'wb') as f:
         downloaded = 0
         start_time = time.time()
+        speed = 0.0  # initialize to avoid UnboundLocalError if chunk_time == 0
 
         while True:
             chunk_start_time = time.time()
@@ -104,7 +112,7 @@ def download_file(url: str, output_path: str, token: str):
             if chunk_time > 0:
                 speed = len(buffer) / chunk_time / (1024 ** 2)  # Speed in MB/s
 
-            if total_size is not None:
+            if total_size is not None and not quiet:
                 progress = downloaded / total_size
                 sys.stdout.write(f'\rDownloading: {filename} [{progress*100:.2f}%] - {speed:.2f} MB/s')
                 sys.stdout.flush()
@@ -121,9 +129,10 @@ def download_file(url: str, output_path: str, token: str):
     else:
         time_str = f'{int(seconds)}s'
 
-    sys.stdout.write('\n')
-    print(f'Download completed. File saved as: {filename}')
-    print(f'Downloaded in {time_str}')
+    if not quiet:
+        sys.stdout.write('\n')
+        print(f'Download completed. File saved as: {filename}')
+        print(f'Downloaded in {time_str}')
 
 
 def main():
@@ -131,9 +140,9 @@ def main():
     token = get_token()
 
     try:
-        download_file(args.url, args.output_path, token)
+        download_file(args.url, args.output_path, token, args.quit)
     except Exception as e:
-        print(f'ERROR: {e}')
+        print(f'ERROR: {e}', file=sys.stderr)
 
 
 if __name__ == '__main__':

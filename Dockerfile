@@ -53,7 +53,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 WORKDIR /
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.3.76 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.5.0 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"
@@ -71,3 +71,6 @@ print(f'{label}: {ver}'); \
 print('CUDA available:', torch.cuda.is_available()); \
 print('CUDA version:', torch.version.cuda); \
 print('Device:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
+
+# ComfyUI
+RUN cat ComfyUI/comfyui_version.py
