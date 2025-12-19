@@ -21,46 +21,11 @@
 - [torch_generic_nms](https://github.com/ronghanghu/torch_generic_nms)
 - [llama-cpp](https://github.com/ggml-org/llama.cpp)
 
-## Setup
+## Build
 
-### Image
+- [Setup](documentation/README_docker.md)
 
-| Component | Version              |
-|-----------|----------------------|
-| OS        | `Ubuntu 22.04 x86_64` |
-| Python    | `3.11.x`             |
-| PyTorch   | `2.9.1`              |
-| CUDA      | `12.8`             |
-| Triton    | `3.5.1`               |
-| onnxruntime-gpu | `1.22.x` |
-| ComfyUI | `0.5.0`  | 
-| CodeServer |  `Latest` |
-
-### Wheels
-
-| Package        | Version  |
-|----------------|----------|
-| flash_attn     | `2.8.3`    |
-| sageattention  |  `2.2.0`   |
-| torch_generic_nms | `0.1` |
-| llmama-cpp | `0.3.16` |
-
-### Optimised
-
-| Processor example | Compute Capability | Family | SM |
-|------------|---------|--------|-----------|
-| A40  | 8.6 | Ampere    | sm_86 |
-| L40S | 8.9 | Ada Lovelace  | sm_89 |
-
-Here is your updated table with the GPU family added for both processors:
-
-Processor	Family	Compute Capability	SM
-A40	Ampere	8.6	sm_86
-L40S	Ada Lovelace	8.9	sm_89
-
-If you want, I can extend the table with more GPUs (RTX 4090, A100, H100, 5090, L4, etc.) or generate a full overview per family.
-
-## Building constrains (/constraints.txt)
+### Building constrains (/constraints.txt)
 
 ```txt
 numpy<2
