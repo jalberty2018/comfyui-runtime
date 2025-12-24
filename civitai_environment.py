@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# 20251224.1
 import os
 import os.path
 import sys
@@ -8,78 +9,189 @@ import urllib.request
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs, unquote
 
-
 CHUNK_SIZE = 1638400
-TOKEN_FILE = Path.home() / '.civitai' / 'config'
-USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/58.0.3029.110 Safari/537.3"
+)
 
 def get_args():
-    parser = argparse.ArgumentParser(description='CivitAI Downloader')
+    parser = argparse.ArgumentParser(description="CivitAI Downloader (+ batch mode)")
 
+    # Backwards compatible: positional url + output_path
     parser.add_argument(
-        'output_path',
-        type=str,
-        help='Output path, eg: /workspace/ComfyUI/models/loras'
+        "url",
+        nargs="?",
+        default=None,
+        help="Download URL, e.g. https://civitai.com/api/download/models/46846",
+    )
+    parser.add_argument(
+        "output_path",
+        nargs="?",
+        default=None,
+        help="Output directory, e.g. /workspace/ComfyUI/models/loras",
     )
 
-    # Either a single URL, or --file
+    # Batch mode: read many urls from a file
     parser.add_argument(
-        'url',
-        nargs='?',
-        type=str,
-        help='CivitAI Download URL, eg: https://civitai.com/api/download/models/2529895?type=Model&format=SafeTensor'
-    )
-
-    parser.add_argument(
-        '--file',
+        "--file",
+        dest="batch_file",
         type=str,
         default=None,
-        help='Batch file with URLs (one per line). Lines starting with # are ignored.'
+        help="Batch file with URLs (and optional per-line output dir).",
+    )
+
+    # Allow pasting like: "url /path" without needing explicit --url
+    # We'll parse free-form trailing arguments into entries
+    parser.add_argument(
+        "items",
+        nargs=argparse.REMAINDER,
+        help="Extra items: you can paste 'URL /path' pairs here.",
     )
 
     parser.add_argument(
-        '--quit',
-        action='store_true',
-        help='No console output except error handling'
+        "--quit",
+        action="store_true",
+        help="No console output except error handling",
     )
 
     return parser.parse_args()
 
 
 def get_token():
-    civitai_token = os.environ.get('CIVITAI_TOKEN')
+    # Correct behavior: return None if not set (don't use a fake default)
+    token = os.environ.get("CIVITAI_TOKEN")
+    if not token:
+        raise ValueError("CIVITAI_TOKEN environment variable is not set")
+    return token
 
-    if not civitai_token:
-        raise ValueError("CIVITAI_TOKEN environment variable is not set (or empty)")
 
-    return civitai_token
+def _is_url(s: str) -> bool:
+    if not s:
+        return False
+    p = urlparse(s)
+    return p.scheme in ("http", "https") and bool(p.netloc)
 
 
-def read_batch_file(batch_file: str):
-    urls = []
-    with open(batch_file, 'r', encoding='utf-8') as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith('#'):
+def parse_batch_line(line: str):
+    line = line.strip()
+    if not line or line.startswith("#"):
+        return None
+
+    # Simple split (supports paths without spaces)
+    parts = line.split()
+    if len(parts) == 1:
+        return (parts[0], None)
+
+    # If user accidentally put path first, try to detect and swap
+    if _is_url(parts[0]) and not _is_url(parts[1]):
+        return (parts[0], parts[1])
+
+    if _is_url(parts[1]) and not _is_url(parts[0]):
+        return (parts[1], parts[0])
+
+    # If both look like URLs or neither do, just assume "url output"
+    return (parts[0], parts[1])
+
+
+def build_download_entries(args):
+    entries = []
+
+    # 1) Batch file mode
+    if args.batch_file:
+        default_out = args.output_path  # may be None; then line must provide outdir
+        with open(args.batch_file, "r", encoding="utf-8") as f:
+            for raw in f:
+                parsed = parse_batch_line(raw)
+                if not parsed:
+                    continue
+                url, outdir = parsed
+                if not outdir:
+                    outdir = default_out
+                if not outdir:
+                    raise ValueError(
+                        f"Batch line missing output dir and no default output_path provided: {raw.strip()}"
+                    )
+                entries.append((url, outdir))
+
+    # 2) Positional single mode: URL + OUTDIR
+    if args.url and args.output_path:
+        entries.append((args.url, args.output_path))
+
+    # 3) Free-form pasted items (REMAINDER)
+    # Allow:
+    #   script.py https://... /path
+    #   script.py https://... /path https://... /path
+    if args.items:
+        items = [x for x in args.items if x.strip()]
+        i = 0
+        while i < len(items):
+            a = items[i]
+            b = items[i + 1] if i + 1 < len(items) else None
+
+            # If "URL /path"
+            if _is_url(a) and b and not _is_url(b):
+                entries.append((a, b))
+                i += 2
                 continue
-            urls.append(line)
-    return urls
+
+            # If "/path URL"
+            if (not _is_url(a)) and b and _is_url(b):
+                entries.append((b, a))
+                i += 2
+                continue
+
+            # If just a URL, try to use args.output_path as default
+            if _is_url(a):
+                if not args.output_path:
+                    raise ValueError(f"Missing output directory for URL: {a}")
+                entries.append((a, args.output_path))
+                i += 1
+                continue
+
+            # If it's not a URL, user probably provided a stray path or typo
+            raise ValueError(f"Unrecognized argument sequence near: '{a}'")
+
+    # De-duplicate while preserving order
+    seen = set()
+    unique = []
+    for u, o in entries:
+        key = (u, o)
+        if key not in seen:
+            seen.add(key)
+            unique.append((u, o))
+
+    return unique
 
 
-def ensure_output_dir(path: str):
+def ensure_dir(path: str):
     os.makedirs(path, exist_ok=True)
     if not os.path.isdir(path):
         raise ValueError(f"Output path is not a directory: {path}")
 
 
+def filename_from_url(url: str) -> str:
+    """
+    Best effort filename extraction from a direct URL.
+    """
+    parsed = urlparse(url)
+    base = os.path.basename(parsed.path.rstrip("/"))
+    if base:
+        return base
+
+    # fallback
+    return "download.safetensors"
+
+
 def download_file(url: str, output_path: str, token: str, quiet: bool):
+    ensure_dir(output_path)
+
     headers = {
-        'Authorization': f'Bearer {token}',
-        'User-Agent': USER_AGENT,
+        "Authorization": f"Bearer {token}",
+        "User-Agent": USER_AGENT,
     }
 
-    # Disable automatic redirect handling
     class NoRedirection(urllib.request.HTTPErrorProcessor):
         def http_response(self, request, response):
             return response
@@ -89,38 +201,39 @@ def download_file(url: str, output_path: str, token: str, quiet: bool):
     opener = urllib.request.build_opener(NoRedirection)
     response = opener.open(request)
 
-    if response.status in [301, 302, 303, 307, 308]:
-        redirect_url = response.getheader('Location')
+    filename = None
 
-        # Extract filename from the redirect URL
+    if response.status in [301, 302, 303, 307, 308]:
+        redirect_url = response.getheader("Location")
+        if not redirect_url:
+            raise Exception("Redirect without Location header")
+
+        # Try extract filename from query parameter (civitai style)
         parsed_url = urlparse(redirect_url)
         query_params = parse_qs(parsed_url.query)
-        content_disposition = query_params.get('response-content-disposition', [None])[0]
+        content_disposition = query_params.get("response-content-disposition", [None])[0]
 
-        if content_disposition and 'filename=' in content_disposition:
-            filename = unquote(content_disposition.split('filename=')[1].strip('"'))
+        if content_disposition and "filename=" in content_disposition:
+            filename = unquote(content_disposition.split("filename=")[1].strip('"'))
         else:
-            raise Exception('Unable to determine filename')
+            # fallback: from redirect URL path
+            filename = filename_from_url(redirect_url)
 
         response = urllib.request.urlopen(redirect_url)
     elif response.status == 404:
-        raise Exception('File not found')
+        raise Exception("File not found")
+    elif response.status == 200:
+        # Sometimes you might get a direct file without redirect
+        filename = filename_from_url(url)
     else:
-        raise Exception(f'No redirect found, something went wrong (HTTP {response.status})')
+        raise Exception(f"Unexpected HTTP status: {response.status}")
 
-    total_size = response.getheader('Content-Length')
-    if total_size is not None:
-        total_size = int(total_size)
+    total_size = response.getheader("Content-Length")
+    total_size = int(total_size) if total_size is not None else None
 
     output_file = os.path.join(output_path, filename)
 
-    # Skip if already exists (optional behavior)
-    if os.path.exists(output_file) and os.path.getsize(output_file) > 0:
-        if not quiet:
-            print(f'SKIP: {filename} already exists: {output_file}')
-        return
-
-    with open(output_file, 'wb') as f:
+    with open(output_file, "wb") as f:
         downloaded = 0
         start_time = time.time()
         speed = 0.0
@@ -135,79 +248,64 @@ def download_file(url: str, output_path: str, token: str, quiet: bool):
 
             downloaded += len(buffer)
             f.write(buffer)
-            chunk_time = chunk_end_time - chunk_start_time
 
+            chunk_time = chunk_end_time - chunk_start_time
             if chunk_time > 0:
-                speed = len(buffer) / chunk_time / (1024 ** 2)  # MB/s
+                speed = len(buffer) / chunk_time / (1024 ** 2)
 
             if total_size is not None and not quiet:
                 progress = downloaded / total_size
-                sys.stdout.write(f'\rDownloading: {filename} [{progress*100:.2f}%] - {speed:.2f} MB/s')
+                sys.stdout.write(
+                    f"\rDownloading: {filename} [{progress*100:.2f}%] - {speed:.2f} MB/s"
+                )
                 sys.stdout.flush()
 
-    end_time = time.time()
-    time_taken = end_time - start_time
+    time_taken = time.time() - start_time
     hours, remainder = divmod(time_taken, 3600)
     minutes, seconds = divmod(remainder, 60)
 
     if hours > 0:
-        time_str = f'{int(hours)}h {int(minutes)}m {int(seconds)}s'
+        time_str = f"{int(hours)}h {int(minutes)}m {int(seconds)}s"
     elif minutes > 0:
-        time_str = f'{int(minutes)}m {int(seconds)}s'
+        time_str = f"{int(minutes)}m {int(seconds)}s"
     else:
-        time_str = f'{int(seconds)}s'
+        time_str = f"{int(seconds)}s"
 
     if not quiet:
-        sys.stdout.write('\n')
-        print(f'Download completed. File saved as: {filename}')
-        print(f'Downloaded in {time_str}')
+        sys.stdout.write("\n")
+        print(f"Download completed. File saved as: {output_file}")
+        print(f"Downloaded in {time_str}")
 
 
 def main():
     args = get_args()
     token = get_token()
-    ensure_output_dir(args.output_path)
 
-    # Validate mutually exclusive mode
-    if args.file and args.url:
-        print("ERROR: Use either a single URL OR --file batchfile.txt (not both).", file=sys.stderr)
-        sys.exit(2)
+    try:
+        entries = build_download_entries(args)
+        if not entries:
+            raise ValueError(
+                "No downloads specified. Use:\n"
+                "  script.py URL OUTDIR\n"
+                "  script.py --file batchfile.txt\n"
+                "  script.py URL OUTDIR URL OUTDIR ...\n"
+                "  script.py URL OUTDIR  (paste style)\n"
+            )
 
-    if not args.file and not args.url:
-        print("ERROR: Missing URL. Provide a URL or use --file batchfile.txt.", file=sys.stderr)
-        sys.exit(2)
-
-    # Build URL list
-    if args.file:
-        try:
-            urls = read_batch_file(args.file)
-        except Exception as e:
-            print(f'ERROR: Could not read batch file: {e}', file=sys.stderr)
-            sys.exit(1)
-
-        if not urls:
-            print('ERROR: Batch file contained no URLs.', file=sys.stderr)
-            sys.exit(1)
-
-        failed = 0
-        for i, url in enumerate(urls, start=1):
-            if not args.quit:
-                print(f'\n[{i}/{len(urls)}] {url}')
+        # Batch processing
+        for (url, outdir) in entries:
             try:
-                download_file(url, args.output_path, token, args.quit)
+                if not args.quit:
+                    print(f"ℹ️ [DOWNLOAD] Fetching {url} → {outdir} ...")
+                download_file(url, outdir, token, args.quit)
             except Exception as e:
-                failed += 1
-                print(f'ERROR: {url} -> {e}', file=sys.stderr)
+                print(f"ERROR: {e}", file=sys.stderr)
+                print(f"⚠️ Failed to download {url}", file=sys.stderr)
 
-        if failed > 0:
-            sys.exit(1)
-    else:
-        try:
-            download_file(args.url, args.output_path, token, args.quit)
-        except Exception as e:
-            print(f'ERROR: {e}', file=sys.stderr)
-            sys.exit(1)
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
