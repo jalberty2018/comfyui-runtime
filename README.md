@@ -6,7 +6,6 @@
 
 - Docker base image for ComfyUI inference with GPU (CUDA) acceleration.
 - This image does not start any service use ls250824/run-x
-- Based on ls250824/pytorch-cuda-ubuntu-runtime<[![Docker Image Version](https://img.shields.io/docker/v/ls250824/pytorch-cuda-ubuntu-runtime)](https://hub.docker.com/r/ls250824/pytorch-cuda-ubuntu-runtime)>.
 
 ## Websites	
 	
@@ -25,28 +24,15 @@
 
 - [Setup](documentation/README_docker.md)
 
-### Building constrains (/constraints.txt)
-
-```txt
-numpy<2
-onnxruntime-gpu==1.22.*
-onnxruntime==0
-llmama-cpp==0.3.16
-```
-
 ## Available Images
 
-### Base Images 
+### Base Image
 
-#### ls250824/pytorch-cuda-ubuntu-runtime
-	
-[![Docker Image Version](https://img.shields.io/docker/v/ls250824/pytorch-cuda-ubuntu-runtime)](https://hub.docker.com/r/ls250824/pytorch-cuda-ubuntu-runtime)
+ls250824/pytorch-cuda-ubuntu-runtime:<[![Docker Image Version](https://img.shields.io/docker/v/ls250824/pytorch-cuda-ubuntu-runtime)](https://hub.docker.com/r/ls250824/pytorch-cuda-ubuntu-runtime)>
 
 ### Custom Build: 
 
-```bash
-docker pull ls250824/comfyui-runtime:<version>
-```
+docker pull ls250824/comfyui-runtime:<[![Docker Image Version](https://img.shields.io/docker/v/ls250824/comfyui-runtime)](https://hub.docker.com/r/ls250824/comfyui-runtime)>
 
 ## Building the Docker Image
 

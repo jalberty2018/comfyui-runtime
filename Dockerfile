@@ -47,13 +47,14 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 WORKDIR /ComfyUI
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    python -m pip install --no-cache-dir --root-user-action ignore -r requirements.txt -c /constraints.txt
+    python -m pip install --no-cache-dir --root-user-action ignore -c /constraints.txt \
+    -r requirements.txt 
 
 # Set working directory
 WORKDIR /
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.5.1 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.6.0 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"

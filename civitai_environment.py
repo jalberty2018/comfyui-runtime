@@ -15,20 +15,27 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 
 
 def get_args():
-    parser = argparse.ArgumentParser(
-        description='CivitAI Downloader',
-    )
-
-    parser.add_argument(
-        'url',
-        type=str,
-        help='CivitAI Download URL, eg: https://civitai.com/api/download/models/46846'
-    )
+    parser = argparse.ArgumentParser(description='CivitAI Downloader')
 
     parser.add_argument(
         'output_path',
         type=str,
-        help='Output path, eg: /workspace/stable-diffusion-webui/models/Stable-diffusion'
+        help='Output path, eg: /workspace/ComfyUI/models/loras'
+    )
+
+    # Either a single URL, or --file
+    parser.add_argument(
+        'url',
+        nargs='?',
+        type=str,
+        help='CivitAI Download URL, eg: https://civitai.com/api/download/models/2529895?type=Model&format=SafeTensor'
+    )
+
+    parser.add_argument(
+        '--file',
+        type=str,
+        default=None,
+        help='Batch file with URLs (one per line). Lines starting with # are ignored.'
     )
 
     parser.add_argument(
@@ -41,14 +48,29 @@ def get_args():
 
 
 def get_token():
-    # Access the environment variable with a default value
-    civitai_token = os.environ.get('CIVITAI_TOKEN', 'default_value')
+    civitai_token = os.environ.get('CIVITAI_TOKEN')
 
-    # Raise an error if not set
-    if civitai_token is None:
-        raise ValueError("CIVITAI_TOKEN environment variable is not set")
+    if not civitai_token:
+        raise ValueError("CIVITAI_TOKEN environment variable is not set (or empty)")
 
     return civitai_token
+
+
+def read_batch_file(batch_file: str):
+    urls = []
+    with open(batch_file, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            urls.append(line)
+    return urls
+
+
+def ensure_output_dir(path: str):
+    os.makedirs(path, exist_ok=True)
+    if not os.path.isdir(path):
+        raise ValueError(f"Output path is not a directory: {path}")
 
 
 def download_file(url: str, output_path: str, token: str, quiet: bool):
@@ -75,7 +97,7 @@ def download_file(url: str, output_path: str, token: str, quiet: bool):
         query_params = parse_qs(parsed_url.query)
         content_disposition = query_params.get('response-content-disposition', [None])[0]
 
-        if content_disposition:
+        if content_disposition and 'filename=' in content_disposition:
             filename = unquote(content_disposition.split('filename=')[1].strip('"'))
         else:
             raise Exception('Unable to determine filename')
@@ -84,7 +106,7 @@ def download_file(url: str, output_path: str, token: str, quiet: bool):
     elif response.status == 404:
         raise Exception('File not found')
     else:
-        raise Exception('No redirect found, something went wrong')
+        raise Exception(f'No redirect found, something went wrong (HTTP {response.status})')
 
     total_size = response.getheader('Content-Length')
     if total_size is not None:
@@ -92,10 +114,16 @@ def download_file(url: str, output_path: str, token: str, quiet: bool):
 
     output_file = os.path.join(output_path, filename)
 
+    # Skip if already exists (optional behavior)
+    if os.path.exists(output_file) and os.path.getsize(output_file) > 0:
+        if not quiet:
+            print(f'SKIP: {filename} already exists: {output_file}')
+        return
+
     with open(output_file, 'wb') as f:
         downloaded = 0
         start_time = time.time()
-        speed = 0.0  # initialize to avoid UnboundLocalError if chunk_time == 0
+        speed = 0.0
 
         while True:
             chunk_start_time = time.time()
@@ -110,7 +138,7 @@ def download_file(url: str, output_path: str, token: str, quiet: bool):
             chunk_time = chunk_end_time - chunk_start_time
 
             if chunk_time > 0:
-                speed = len(buffer) / chunk_time / (1024 ** 2)  # Speed in MB/s
+                speed = len(buffer) / chunk_time / (1024 ** 2)  # MB/s
 
             if total_size is not None and not quiet:
                 progress = downloaded / total_size
@@ -138,11 +166,47 @@ def download_file(url: str, output_path: str, token: str, quiet: bool):
 def main():
     args = get_args()
     token = get_token()
+    ensure_output_dir(args.output_path)
 
-    try:
-        download_file(args.url, args.output_path, token, args.quit)
-    except Exception as e:
-        print(f'ERROR: {e}', file=sys.stderr)
+    # Validate mutually exclusive mode
+    if args.file and args.url:
+        print("ERROR: Use either a single URL OR --file batchfile.txt (not both).", file=sys.stderr)
+        sys.exit(2)
+
+    if not args.file and not args.url:
+        print("ERROR: Missing URL. Provide a URL or use --file batchfile.txt.", file=sys.stderr)
+        sys.exit(2)
+
+    # Build URL list
+    if args.file:
+        try:
+            urls = read_batch_file(args.file)
+        except Exception as e:
+            print(f'ERROR: Could not read batch file: {e}', file=sys.stderr)
+            sys.exit(1)
+
+        if not urls:
+            print('ERROR: Batch file contained no URLs.', file=sys.stderr)
+            sys.exit(1)
+
+        failed = 0
+        for i, url in enumerate(urls, start=1):
+            if not args.quit:
+                print(f'\n[{i}/{len(urls)}] {url}')
+            try:
+                download_file(url, args.output_path, token, args.quit)
+            except Exception as e:
+                failed += 1
+                print(f'ERROR: {url} -> {e}', file=sys.stderr)
+
+        if failed > 0:
+            sys.exit(1)
+    else:
+        try:
+            download_file(args.url, args.output_path, token, args.quit)
+        except Exception as e:
+            print(f'ERROR: {e}', file=sys.stderr)
+            sys.exit(1)
 
 
 if __name__ == '__main__':

@@ -35,7 +35,7 @@
 | CUDA      | `12.8`             |
 | Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x` |
-| ComfyUI | `0.5.1`  | 
+| ComfyUI | `0.6.0`  | 
 | CodeServer |  `Latest` |
 
 ### Wheels
@@ -49,10 +49,10 @@
 
 ### Optimised
 
-| Processor example | Compute Capability | Family | SM |
+| Family | Compute Capability | Processor example | SM |
 |------------|---------|--------|-----------|
-| A40  | 8.6 | Ampere    | sm_86 |
-| L40S | 8.9 | Ada Lovelace  | sm_89 |
+| Ampere  | 8.6 |  A40   | sm_86 |
+| Ada Lovelace | 8.9 | L40S  | sm_89 |
 
 ## Building constrains (/constraints.txt)
 
@@ -61,6 +61,16 @@ numpy<2
 onnxruntime-gpu==1.22.*
 onnxruntime==0
 llmama-cpp==0.3.16
+```
+
+## Adding comfyui-manager internal version instead of legacy
+
+```bash
+WORKDIR /ComfyUI
+RUN --mount=type=cache,target=/root/.cache/pip \
+    python -m pip install --no-cache-dir --root-user-action ignore -c /constraints.txt \
+    matrix-nio \
+    -r manager_requirements.txt
 ```
 
 ## Docker speed up
