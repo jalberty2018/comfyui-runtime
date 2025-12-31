@@ -8,7 +8,7 @@
 
 ## Websites	
 
-- [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
+- [ComfyUI](https://github.com/Comfy-Org/ComfyUI)
 - [comfy-cli](https://github.com/Comfy-Org/comfy-cli)
 - [Code server](https://github.com/coder/code-server)
 - [HuggingFace cli](https://huggingface.co/docs/huggingface_hub/guides/cli)
@@ -35,7 +35,7 @@
 | CUDA      | `12.8`             |
 | Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x` |
-| ComfyUI | `0.6.0`  | 
+| ComfyUI | `0.7.0`  | 
 | CodeServer |  `Latest` |
 
 ### Wheels

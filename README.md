@@ -9,7 +9,7 @@
 
 ## Websites	
 	
-- [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
+- [ComfyUI](https://github.com/Comfy-Org/ComfyUI)
 - [comfy-cli](https://github.com/Comfy-Org/comfy-cli)
 - [Code server](https://github.com/coder/code-server)
 - [HuggingFace cli](https://huggingface.co/docs/huggingface_hub/guides/cli)
