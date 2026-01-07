@@ -9,10 +9,7 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # Clone ComfyUI
 RUN --mount=type=cache,target=/root/.cache/git \
-    git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git
-
-# RUN --mount=type=cache,target=/root/.cache/git \
-#    git clone --depth=1 https://github.com/Comfy-Org/ComfyUI.git /ComfyUI
+    git clone --depth=1 https://github.com/Comfy-Org/ComfyUI.git /ComfyUI
 
 # Pin ORT-GPU to 1.22.* so , numpy and attentions.
 RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\nflash_attn==2.8.3\nsageattention==2.2.0\nllama_cpp_python==0.3.16\n" > /constraints.txt
@@ -45,8 +42,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # ComfyUI
 WORKDIR /ComfyUI
 
-# Checkout ComfyUI release version 0.7.0
-RUN git fetch --unshallow && git checkout f59f71cf34067d46713f6243312f7f0b360d061f
+# Checkout ComfyUI release version 0.8.0
+RUN git fetch --unshallow && git checkout fc0cb10bcbee6e73ed3caf34c27f7bde4559a07f
 
 # Install ComfyUI requirements
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -61,7 +58,7 @@ COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.7.0 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.8.0 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"

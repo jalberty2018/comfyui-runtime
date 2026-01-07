@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# 20251224.1
+# 20260103.1
 import os
 import os.path
 import sys
@@ -286,10 +286,10 @@ def main():
         if not entries:
             raise ValueError(
                 "No downloads specified. Use:\n"
-                "  script.py URL OUTDIR\n"
-                "  script.py --file batchfile.txt\n"
-                "  script.py URL OUTDIR URL OUTDIR ...\n"
-                "  script.py URL OUTDIR  (paste style)\n"
+                "  civitai URL OUTDIR\n"
+                "  civitai --file batchfile.txt\n"
+                "  civitai URL OUTDIR URL OUTDIR ...\n"
+                "  civitai URL OUTDIR  (paste style)\n"
             )
 
         # Batch processing
