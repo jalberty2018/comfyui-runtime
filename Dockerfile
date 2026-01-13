@@ -42,8 +42,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # ComfyUI
 WORKDIR /ComfyUI
 
-# Checkout ComfyUI release version 0.8.0
-RUN git fetch --unshallow && git checkout fc0cb10bcbee6e73ed3caf34c27f7bde4559a07f
+# Checkout ComfyUI release version 0.9.1
+RUN git fetch --unshallow && git checkout 5ac13725331c1dfdf7aab977d4588b0a06a3debd
 
 # Install ComfyUI requirements
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -58,7 +58,7 @@ COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.8.0 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.9.1 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"
