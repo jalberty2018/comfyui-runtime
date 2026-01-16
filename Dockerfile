@@ -4,13 +4,6 @@ FROM ls250824/pytorch-cuda-ubuntu-runtime:17122025
 # Set working directory
 WORKDIR /
 
-# Install code-server
-RUN curl -fsSL https://code-server.dev/install.sh | sh
-
-# Clone ComfyUI
-RUN --mount=type=cache,target=/root/.cache/git \
-    git clone --depth=1 https://github.com/Comfy-Org/ComfyUI.git /ComfyUI
-
 # Pin ORT-GPU to 1.22.* so , numpy and attentions.
 RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\nflash_attn==2.8.3\nsageattention==2.2.0\nllama_cpp_python==0.3.16\n" > /constraints.txt
 
@@ -39,11 +32,18 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     echo "/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib" > /etc/ld.so.conf.d/cublas.conf && \
     ldconfig
 
+# Install code-server
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
+# Clone ComfyUI
+RUN --mount=type=cache,target=/root/.cache/git \
+    git clone --depth=1 https://github.com/Comfy-Org/ComfyUI.git /ComfyUI
+
 # ComfyUI
 WORKDIR /ComfyUI
 
-# Checkout ComfyUI release version 0.9.1
-RUN git fetch --unshallow && git checkout 5ac13725331c1dfdf7aab977d4588b0a06a3debd
+# Checkout ComfyUI release version 0.9.2
+RUN git fetch --unshallow && git checkout 8f40b43e0204d5b9780f3e9618e140e929e80594
 
 # Install ComfyUI requirements
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -58,7 +58,7 @@ COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.9.1 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.9.2 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"
