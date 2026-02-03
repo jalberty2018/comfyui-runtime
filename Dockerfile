@@ -4,8 +4,8 @@ FROM ls250824/pytorch-cuda-ubuntu-runtime:17122025
 # Set working directory
 WORKDIR /
 
-# Pin ORT-GPU to 1.22.* so , numpy and attentions.
-RUN printf "numpy<2\nonnxruntime-gpu==1.22.*\nonnxruntime==0\nflash_attn==2.8.3\nsageattention==2.2.0\nllama_cpp_python==0.3.16\n" > /constraints.txt
+# Pin
+COPY constraints.txt /constraints.txt
 
 # Download wheels
 RUN wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl && \
@@ -19,7 +19,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
       ./flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
       ./sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
 	  ./torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl \
-      "onnxruntime-gpu==1.22.*" "huggingface_hub[cli]" comfy-cli onnx && \
+      "onnxruntime-gpu==1.22.*" onnx "typer==0.21.1" "click==8.*" "huggingface_hub" && \
     rm -f flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
           sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
 		  torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl

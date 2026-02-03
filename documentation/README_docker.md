@@ -61,6 +61,8 @@ numpy<2
 onnxruntime-gpu==1.22.*
 onnxruntime==0
 llmama-cpp==0.3.16
+typer==0.21.1
+click==8.*
 ```
 
 ## Adding comfyui-manager internal version instead of legacy
