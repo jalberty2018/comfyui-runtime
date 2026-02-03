@@ -32,6 +32,9 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     echo "/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib" > /etc/ld.so.conf.d/cublas.conf && \
     ldconfig
 
+# Install code-server
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
 # Clone ComfyUI
 RUN --mount=type=cache,target=/root/.cache/git \
     git clone --depth=1 https://github.com/Comfy-Org/ComfyUI.git /ComfyUI
@@ -39,8 +42,8 @@ RUN --mount=type=cache,target=/root/.cache/git \
 # ComfyUI
 WORKDIR /ComfyUI
 
-# Checkout ComfyUI release version 0.11.0
-RUN git fetch --unshallow && git checkout 09725967cf76304371c390ca1d6483e04061da48
+# Checkout ComfyUI release version 0.12.0
+RUN git fetch --unshallow && git checkout 66e1b07402a84363b174c35d09acfcab0af7b0e5
 
 # Install ComfyUI requirements
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -50,15 +53,12 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Set working directory
 WORKDIR /
 
-# Install code-server
-RUN curl -fsSL https://code-server.dev/install.sh | sh
-
 # Copy and set up Civitai downloader with appropriate permissions
 COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.11.0 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.12.0 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"
