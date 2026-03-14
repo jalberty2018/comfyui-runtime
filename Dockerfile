@@ -13,24 +13,26 @@ RUN wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/do
 	wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl && \
 	wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/llama_cpp_python-0.3.16-cp311-cp311-linux_x86_64.whl
 
-# Install and remove wheels
+# Install core GPU wheels
 RUN --mount=type=cache,target=/root/.cache/pip \
-    python -m pip install --no-cache-dir --root-user-action ignore -c /constraints.txt \
-      ./flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
-      ./sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
-	  ./torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl \
-      "onnxruntime-gpu==1.22.*" onnx "typer==0.21.1" "click==8.*" "huggingface_hub" && \
-    rm -f flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
-          sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
-		  torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl
-
-RUN --mount=type=cache,target=/root/.cache/pip \
-    python -m pip install --no-cache-dir --root-user-action ignore -c /constraints.txt \
-      ./llama_cpp_python-0.3.16-cp311-cp311-linux_x86_64.whl && \
-    rm -f llama_cpp_python-0.3.16-cp311-cp311-linux_x86_64.whl && \
-    echo "/opt/conda/lib/python3.11/site-packages/nvidia/cuda_runtime/lib" > /etc/ld.so.conf.d/cuda-runtime.conf  && \
-    echo "/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib" > /etc/ld.so.conf.d/cublas.conf && \
-    ldconfig
+    python -m pip install \
+        --no-cache-dir \
+        --root-user-action ignore \
+        -c /constraints.txt \
+        \
+        ./flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
+        ./sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
+        ./torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl \
+        \
+        "onnxruntime-gpu==1.22.*" \
+        onnx \
+        "typer==0.21.1" \
+        "click==8.*" \
+        huggingface_hub \
+    && rm -f \
+        flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl \
+        sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
+        torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl
 
 # Install code-server
 RUN curl -fsSL https://code-server.dev/install.sh | sh
@@ -42,8 +44,8 @@ RUN --mount=type=cache,target=/root/.cache/git \
 # ComfyUI
 WORKDIR /ComfyUI
 
-# Checkout ComfyUI release version 0.16.3
-RUN git fetch --unshallow && git checkout 1c218282369a6cc80651d878fc51fa33d7bf34e2
+# Checkout ComfyUI release version 0.17.1
+RUN git fetch --unshallow && git checkout b3f5f7e7bac54adb5de12d06512484a8a25f078f
 
 # Install ComfyUI requirements
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -58,7 +60,7 @@ COPY civitai_environment.py /usr/local/bin/civitai
 RUN chmod +x /usr/local/bin/civitai
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.16.3 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.17.0 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"
