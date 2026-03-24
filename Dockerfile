@@ -34,6 +34,14 @@ RUN --mount=type=cache,target=/root/.cache/pip \
         sageattention-2.2.0-cp311-cp311-linux_x86_64.whl \
         torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl
 
+RUN --mount=type=cache,target=/root/.cache/pip \
+    python -m pip install --no-cache-dir --root-user-action ignore -c /constraints.txt \
+      ./llama_cpp_python-0.3.16-cp311-cp311-linux_x86_64.whl && \
+    rm -f llama_cpp_python-0.3.16-cp311-cp311-linux_x86_64.whl && \
+    echo "/opt/conda/lib/python3.11/site-packages/nvidia/cuda_runtime/lib" > /etc/ld.so.conf.d/cuda-runtime.conf  && \
+    echo "/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib" > /etc/ld.so.conf.d/cublas.conf && \
+    ldconfig
+
 # Install code-server
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
