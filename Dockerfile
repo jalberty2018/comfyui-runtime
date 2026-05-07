@@ -64,8 +64,9 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 WORKDIR /
 
 # Copy and set up Civitai downloader with appropriate permissions
-COPY civitai_environment.py /usr/local/bin/civitai
-RUN chmod +x /usr/local/bin/civitai
+COPY civitai_com_environment.py /usr/local/bin/civitai_com
+COPY civitai_red_environment.py /usr/local/bin/civitai_red
+RUN chmod +x /usr/local/bin/civitai_com /usr/local/bin/civitai_red
 
 # Labels
 LABEL org.opencontainers.image.title="Base image ComfyUI 0.20.1 + code-server + downloaders" \
