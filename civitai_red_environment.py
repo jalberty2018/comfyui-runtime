@@ -16,7 +16,7 @@ def get_filename_from_response(response, fallback):
 def download_model(version_id, dest_dir):
     api_key = os.environ.get("CIVITAI_TOKEN")
     if not api_key:
-        raise SystemExit("ERROR: zet eerst CIVITAI_TOKEN environment variable.")
+        raise SystemExit("❌ No CIVITAI_TOKEN environment variable set.")
 
     dest = Path(dest_dir)
     dest.mkdir(parents=True, exist_ok=True)
@@ -24,14 +24,14 @@ def download_model(version_id, dest_dir):
     meta_url = f"{API_BASE}/{version_id}"
     headers = {"Authorization": f"Bearer {api_key}"}
 
-    print(f"Metadata ophalen voor modelVersionId={version_id}")
+    print(f"ℹ️ Downloading Metadata for modelVersionId={version_id}")
     meta = requests.get(meta_url, headers=headers, timeout=30)
     meta.raise_for_status()
     data = meta.json()
 
     download_url = data.get("downloadUrl")
     if not download_url:
-        raise SystemExit("ERROR: geen downloadUrl gevonden.")
+        raise SystemExit("❌ No downloadUrl found.")
 
     # Token als query parameter werkt vaak het betrouwbaarst voor downloads
     sep = "&" if "?" in download_url else "?"
@@ -39,7 +39,7 @@ def download_model(version_id, dest_dir):
 
     fallback_name = f"civitai_{version_id}.safetensors"
 
-    print("Download starten...")
+    print("▶️ Start download ...")
     with requests.get(download_url, stream=True, timeout=60) as r:
         r.raise_for_status()
 
@@ -48,7 +48,7 @@ def download_model(version_id, dest_dir):
         tmp = dest / f"{filename}.part"
 
         if target.exists() and target.stat().st_size > 0:
-            print(f"SKIP: bestaat al: {target}")
+            print(f"⚠️ SKIP: File exists: {target}")
             return
 
         total = int(r.headers.get("content-length", 0))
@@ -64,15 +64,15 @@ def download_model(version_id, dest_dir):
                         print(f"\r{pct:.1f}%  {downloaded/1024/1024:.1f} MB", end="")
 
         tmp.rename(target)
-        print(f"\nKlaar: {target}")
+        print(f"\n✅ Ready: {target}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Gebruik:")
+        print("Usage:")
         print("  civitai_red VERSION_ID DEST_DIR")
         print()
-        print("Voorbeeld:")
-        print("  civitai_red 2228466 /workspace/ComfyUI/models/loras")
+        print("Example:")
+        print("  civitai_red 2893442 /workspace/ComfyUI/models/loras")
         sys.exit(1)
 
     download_model(sys.argv[1], sys.argv[2])
