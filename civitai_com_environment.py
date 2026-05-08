@@ -24,8 +24,7 @@ def download_model(version_id, dest_dir, quiet=False):
     meta_url = f"{API_BASE}/{version_id}"
     headers = {"Authorization": f"Bearer {api_key}"}
 
-    if not quiet:
-        print(f"ℹ️ Downloading Metadata for modelVersionId={version_id}")
+    print(f"ℹ️ Downloading Metadata for modelVersionId={version_id}")
 
     meta = requests.get(meta_url, headers=headers, timeout=30)
     meta.raise_for_status()
@@ -40,8 +39,7 @@ def download_model(version_id, dest_dir, quiet=False):
 
     fallback_name = f"civitai_{version_id}.safetensors"
 
-    if not quiet:
-        print("▶️ Start download ...")
+    print("▶️ Start download ...")
 
     with requests.get(download_url, stream=True, timeout=60) as r:
         r.raise_for_status()
