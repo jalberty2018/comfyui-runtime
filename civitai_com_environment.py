@@ -86,7 +86,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "version_id",
         help="Civitai modelVersionId (example: 2893442)"
-    
+    )
 
     parser.add_argument(
         "dest_dir",
