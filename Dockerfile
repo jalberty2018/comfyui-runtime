@@ -9,8 +9,8 @@ COPY constraints.txt /constraints.txt
 
 # Download wheels
 RUN wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/flash_attn-2.8.3-cp311-cp311-linux_x86_64.whl && \
+    wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl && \
     wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/sageattention-2.2.0-cp311-cp311-linux_x86_64.whl && \
-	wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/torch_generic_nms-0.1-cp311-cp311-linux_x86_64.whl && \
 	wget -q https://github.com/jalberty2018/run-pytorch-cuda-develop/releases/download/v1.3.1/llama_cpp_python-0.3.16-cp311-cp311-linux_x86_64.whl
 
 # Install core GPU wheels
