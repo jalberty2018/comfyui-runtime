@@ -5,10 +5,10 @@
 ## Information
 
 - Docker base image for ComfyUI inference with GPU (CUDA) acceleration.
-- This image does not start any service use ls250824/run-x
+- This image does not start any services; use `ls250824/run-x` for that.
 
-## Websites	
-	
+## Websites
+
 - [ComfyUI](https://github.com/Comfy-Org/ComfyUI)
 - [comfy-cli](https://github.com/Comfy-Org/comfy-cli)
 - [Code server](https://github.com/coder/code-server)
@@ -28,17 +28,23 @@
 
 ### Base Image
 
-ls250824/pytorch-cuda-ubuntu-runtime:<[![Docker Image Version](https://img.shields.io/docker/v/ls250824/pytorch-cuda-ubuntu-runtime)](https://hub.docker.com/r/ls250824/pytorch-cuda-ubuntu-runtime)>
+`ls250824/pytorch-cuda-ubuntu-runtime:<tag>`
 
-### Custom Build: 
+[Docker Hub: ls250824/pytorch-cuda-ubuntu-runtime](https://hub.docker.com/r/ls250824/pytorch-cuda-ubuntu-runtime)
 
-docker pull ls250824/comfyui-runtime:<[![Docker Image Version](https://img.shields.io/docker/v/ls250824/comfyui-runtime)](https://hub.docker.com/r/ls250824/comfyui-runtime)>
+### Custom Build
+
+```bash
+docker pull ls250824/comfyui-runtime:<tag>
+```
+
+[Docker Hub: ls250824/comfyui-runtime](https://hub.docker.com/r/ls250824/comfyui-runtime)
 
 ## Building the Docker Image
 
-You can build and push the image to Docker Hub using the `build-docker.py` script.
+You can build and push the image to Docker Hub using the `build_docker.py` script.
 
-### `build-docker.py` Script Options
+### `build_docker.py` Script Options
 
 | Option         | Description                                         | Default                |
 |----------------|-----------------------------------------------------|------------------------|
@@ -52,16 +58,16 @@ Run the following command to clone the repository and build the image:
 
 ```bash
 git clone https://github.com/jalberty2018/comfyui-runtime.git
-cp comfyui-runtime/build-docker.py ..
+cp comfyui-runtime/build_docker.py ..
 
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
-python3 build-docker.py \
+python3 build_docker.py \
 --username=<your_dockerhub_username> \
---tag=<custom_tag> \ 
+--tag=<custom_tag> \
 comfyui-runtime
 ```
 
-Note: If you want to push the image with the latest tag, add the --latest flag at the end.
+Note: If you want to push the image with the latest tag, add the `--latest` flag at the end.
 

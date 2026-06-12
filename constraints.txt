@@ -15,5 +15,5 @@ llama-cpp-python==0.3.16
 # CLI dependency (hf)
 typer==0.21.1
 
-# Dependency test with typer
+# Dependency required by typer
 click==8.*
