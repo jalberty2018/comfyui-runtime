@@ -74,6 +74,9 @@ LABEL org.opencontainers.image.title="Base image ComfyUI 0.24.0 + code-server + 
       org.opencontainers.image.licenses="MIT"
 
 # Check
+# Update Hugging Face CLI and verify the hf command is available
+RUN hf update && hf version
+
 RUN python -c "import torch, torchvision, torchaudio, triton, importlib, importlib.util as iu; \
 print(f'Torch: {torch.__version__}'); \
 print(f'Torchvision: {torchvision.__version__}'); \
