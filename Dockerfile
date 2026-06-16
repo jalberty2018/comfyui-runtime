@@ -1,6 +1,9 @@
 # syntax=docker/dockerfile:1.7
 FROM ls250824/pytorch-cuda-ubuntu-runtime:17122025
 
+# Checkout ComfyUI release version 0.25.0
+ARG COMFYUI_CHECKOUT=135abed8da169e33ab0b86550e05e3ae55d6df8c
+
 # Set working directory
 WORKDIR /
 
@@ -51,8 +54,7 @@ RUN --mount=type=cache,target=/root/.cache/git \
 # ComfyUI
 WORKDIR /ComfyUI
 
-# Checkout ComfyUI release version 0.24.0
-RUN git fetch --unshallow && git checkout f49bdb655707b97952dcef40e12e5af1f08d2007
+RUN git fetch --unshallow && git checkout "${COMFYUI_CHECKOUT}"
 
 # Install ComfyUI requirements
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -68,7 +70,7 @@ COPY --chmod=755 civitai_com_environment.py /usr/local/bin/civitai_com
 COPY --chmod=755 civitai_red_environment.py /usr/local/bin/civitai_red
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.24.0 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.25.0 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"
