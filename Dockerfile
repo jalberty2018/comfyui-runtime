@@ -1,9 +1,6 @@
 # syntax=docker/dockerfile:1.7
 FROM ls250824/pytorch-cuda-ubuntu-runtime:17122025
 
-# Checkout ComfyUI release version 0.25.0
-ARG COMFYUI_CHECKOUT=135abed8da169e33ab0b86550e05e3ae55d6df8c
-
 # Set working directory
 WORKDIR /
 
@@ -47,14 +44,15 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Install code-server
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
+# ComfyUI release version
+ARG COMFYUI_VERSION=v0.25.0
+
 # Clone ComfyUI
 RUN --mount=type=cache,target=/root/.cache/git \
-    git clone --depth=1 https://github.com/Comfy-Org/ComfyUI.git /ComfyUI
+    git clone --depth=1 --branch "${COMFYUI_VERSION}" https://github.com/Comfy-Org/ComfyUI.git /ComfyUI
 
 # ComfyUI
 WORKDIR /ComfyUI
-
-RUN git fetch --unshallow && git checkout "${COMFYUI_CHECKOUT}"
 
 # Install ComfyUI requirements
 RUN --mount=type=cache,target=/root/.cache/pip \
