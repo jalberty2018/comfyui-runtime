@@ -45,7 +45,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # ComfyUI release version
-ARG COMFYUI_VERSION=v0.25.0
+ARG COMFYUI_VERSION=v0.26.0
 
 # Clone ComfyUI
 RUN --mount=type=cache,target=/root/.cache/git \
@@ -68,7 +68,7 @@ COPY --chmod=755 civitai_com_environment.py /usr/local/bin/civitai_com
 COPY --chmod=755 civitai_red_environment.py /usr/local/bin/civitai_red
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.25.0 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.26.0 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses="MIT"
