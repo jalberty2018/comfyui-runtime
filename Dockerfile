@@ -42,7 +42,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     ldconfig
 
 # ComfyUI release version
-ARG COMFYUI_VERSION=v0.34.0
+ARG COMFYUI_VERSION=v0.34.5
 
 # Clone ComfyUI
 RUN --mount=type=cache,target=/root/.cache/git \
@@ -67,11 +67,14 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh
 COPY --chmod=755 civitai_com_environment.py /usr/local/bin/civitai_com
 COPY --chmod=755 civitai_red_environment.py /usr/local/bin/civitai_red
 
+# Project licensing documents; upstream components retain their own notices.
+COPY THIRD_PARTY_NOTICES.md MODEL_USAGE.md /usr/share/doc/comfyui-runtime/
+
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.34.0 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.34.5 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
-      org.opencontainers.image.licenses="MIT"
+      org.opencontainers.image.licenses=""
 
 # Check
 # Update Hugging Face CLI and verify the hf command is available
