@@ -5,7 +5,7 @@
 ## Information
 
 - Docker base image for ComfyUI inference with GPU (CUDA) acceleration.
-- Includes ComfyUI `0.34.5`.
+- Includes ComfyUI `0.35.0`.
 - This image does not start any services; use `ls250824/run-x` for that.
 
 ## Websites
