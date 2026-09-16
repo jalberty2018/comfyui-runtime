@@ -35,7 +35,7 @@
 | CUDA      | `12.8`               |
 | Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x`     |
-| ComfyUI | `0.35.0` |
+| ComfyUI | `0.36.0` |
 | CodeServer | `latest`          |
 
 ### Wheels
