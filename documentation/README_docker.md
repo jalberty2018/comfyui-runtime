@@ -21,7 +21,7 @@
 
 ## Images on Docker
 
-- If the image is **less than one day old**, it might not be tested yet or might still be updated.
+- This image is frozen on ComfyUI 0.36.0
 
 ## Latest Image Setup
 
@@ -35,7 +35,7 @@
 | CUDA      | `12.8`               |
 | Triton    | `3.5.1`               |
 | onnxruntime-gpu | `1.22.x`     |
-| ComfyUI | `0.37.0` |
+| ComfyUI | `0.36.0` |
 | CodeServer | `latest`          |
 
 ### Wheels

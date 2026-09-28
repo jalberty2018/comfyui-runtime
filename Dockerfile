@@ -41,8 +41,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     echo "/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib" > /etc/ld.so.conf.d/cublas.conf && \
     ldconfig
 
-# ComfyUI release version
-ARG COMFYUI_VERSION=v0.37.0
+# ComfyUI release version fozen
+ARG COMFYUI_VERSION=v0.36.0
 
 # Clone ComfyUI
 RUN --mount=type=cache,target=/root/.cache/git \
@@ -71,7 +71,7 @@ COPY --chmod=755 civitai_red_environment.py /usr/local/bin/civitai_red
 COPY THIRD_PARTY_NOTICES.md MODEL_USAGE.md /usr/share/doc/comfyui-runtime/
 
 # Labels
-LABEL org.opencontainers.image.title="Base image ComfyUI 0.37.0 + code-server + downloaders" \
+LABEL org.opencontainers.image.title="Base image ComfyUI 0.36.0 + code-server + downloaders" \
       org.opencontainers.image.description="ComfyUI + flash-attn + sageattention + onnxruntime-gpu + torch_generic_nms + code-server + civitai downloader + huggingface_hub" \
       org.opencontainers.image.source="https://hub.docker.com/r/ls250824/comfyui-runtime" \
       org.opencontainers.image.licenses=""
